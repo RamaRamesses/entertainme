@@ -30,6 +30,7 @@ app.get('/movies', async (req, res) => {
                 method: 'GET',
                 url: moviesUrl,
             })
+            console.log('delete')
             await redis.set('movies', JSON.stringify(response.data));
             res.status(200).json(response.data);
         }
@@ -157,5 +158,40 @@ app.delete('/series/:id', async (req, res) => {
     }
 })
 
+// BOTH
+
+app.get('/entertainme', async (req, res) => {
+    try {
+        const seriesUrl = `http://localhost:5002/`;
+        const moviesUrl = `http://localhost:5001/`;
+
+        let seriesRedis: any = await redis.get('series');
+        let moviesRedis: any = await redis.get('movies');
+
+        const series = await axios({
+            method: 'GET',
+            url: seriesUrl,
+        })
+        await redis.set('series', JSON.stringify(series.data));
+        const movies = await axios({
+            method: 'GET',
+            url: moviesUrl,
+        })
+        await redis.set('movies', JSON.stringify(movies.data));
+        seriesRedis = await redis.get('series');
+        moviesRedis = await redis.get('movies');
+
+        const seriesJSON = JSON.parse(seriesRedis)
+        const moviesJSON = JSON.parse(moviesRedis)
+
+        res.status(200).json({
+            movies: moviesJSON,
+            tvSeries: seriesJSON
+        })
+    } catch (err) {
+        res.status(500).json(err);
+        console.log(err);
+    }
+})
 
 app.listen(PORT, () => console.log(PORT));
