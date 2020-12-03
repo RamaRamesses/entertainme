@@ -1,6 +1,6 @@
 import express from 'express';
 import { MongoClient } from 'mongodb';
-// import { MoviesController } from './controllers/moviesController'
+import { SeriesController } from './controllers/seriesController'
 
 const databaseURL = "mongodb://localhost:27017";
 const client = new MongoClient(databaseURL, { useUnifiedTopology: true });
@@ -17,9 +17,9 @@ const PORT = 5002;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-// app.get('/', MoviesController.findData)
-// app.post('/', MoviesController.postMovie)
-// app.put('/:id', MoviesController.updateMovie)
-// app.delete('/:id', MoviesController.deleteMovie)
+app.get('/', SeriesController.findData)
+app.post('/', SeriesController.postSeries)
+app.put('/:id', SeriesController.updateSeries)
+app.delete('/:id', SeriesController.deleteSeries)
 
 app.listen(PORT, () => console.log(PORT));

@@ -12,7 +12,7 @@ export const moviesCollection = db.collection('movies');
 
 
 const app = express();
-const PORT = 3001;
+const PORT = 5001;
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
