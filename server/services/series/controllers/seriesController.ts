@@ -8,7 +8,7 @@ interface payloadConfig {
     overview: string,
     poster_path: string,
     popularity: string,
-    tags: Array<any>
+    tags: String[]
 }
 
 interface postInterface<T> extends Request {
@@ -71,7 +71,7 @@ export class SeriesController {
     static async deleteSeries (req: Request, res: Response) {
         try {
             const query = {"_id": new ObjectID(`${req.params.id}`)}
-            const series = await seriesCollection.deleteOne(query);
+            const series = await seriesCollection.findOneAndDelete(query);
             res.status(200).json(series)
         } catch (err) {
             console.log(err);
