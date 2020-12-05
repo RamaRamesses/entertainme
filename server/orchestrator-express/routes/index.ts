@@ -59,6 +59,22 @@ router.put('/movies/:id', async (req, res) => {
     }
 })
 
+router.patch('/movies/:id', async (req, res) => {
+    try {
+        const moviesUrl = `http://localhost:5001/${req.params.id}`;
+        const response = await axios({
+            method: 'PATCH',
+            url: moviesUrl,
+            data: req.body
+        })
+        res.status(200).json(response.data);
+        redis.del('movies');
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+})
+
 router.delete('/movies/:id', async (req, res) => {
     try {
         const moviesUrl = `http://localhost:5001/${req.params.id}`;
@@ -144,6 +160,21 @@ router.delete('/series/:id', async (req, res) => {
     }
 })
 
+router.patch('/series/:id', async (req, res) => {
+    try {
+        const seriesUrl = `http://localhost:5002/${req.params.id}`;
+        const response = await axios({
+            method: 'PATCH',
+            url: seriesUrl,
+            data: req.body
+        })
+        res.status(200).json(response.data)
+        redis.del('series')
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err)
+    }
+})
 // BOTH
 
 router.get('/entertainme', async (req, res) => {

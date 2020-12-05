@@ -20,6 +20,7 @@ app.use(express.urlencoded({extended: true}));
 app.get('/', MoviesController.findData)
 app.post('/', MoviesController.postMovie)
 app.put('/:id', MoviesController.updateMovie)
+app.patch('/:id', MoviesController.addTag)
 app.delete('/:id', MoviesController.deleteMovie)
 
 app.listen(PORT, () => console.log(PORT));

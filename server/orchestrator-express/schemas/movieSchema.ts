@@ -13,7 +13,9 @@ const typeDefs = gql`
         _id: String,
         title: String,
         overview: String,
-        poster_path: String
+        poster_path: String,
+        popularity: Int,
+        tags: [String]
     }
     
     type deletedMovie {
@@ -23,20 +25,28 @@ const typeDefs = gql`
     input movieInput {
         title: String,
         overview: String,
-        poster_path: String
+        poster_path: String,
+        popularity: Int
     }
 
     input updateMovie {
         id: String,
         title: String,
         overview: String,
-        poster_path: String
+        poster_path: String,
+        popularity: Int
+    }
+
+    input addTag {
+        id: String,
+        tag: String
     }
     
     extend type Mutation {
         addMovie(movie: movieInput) : Movie
         updateMovie(movie: updateMovie) : Movie
         deleteMovie(id: String): deletedMovie
+        addMovieTag(movie: addTag) : Movie
     }
 `
 const resolvers = {
@@ -91,15 +101,14 @@ const resolvers = {
     Mutation : {
         addMovie: async (parent: any, args: any, context: any, info: any) => {
             try {
-                const { title, overview, poster_path } = args.movie;
+                const { title, overview, poster_path, popularity } = args.movie;
                 const moviesUrl = `http://localhost:5001/`;
                 const response = await axios({
                     method: 'POST',
                     url: moviesUrl,
-                    data: { title, overview, poster_path }
+                    data: { title, overview, poster_path, popularity, tags: [] }
                 })
                 redis.del('movies')
-                console.log(response.data)
                 return response.data.ops[0];
             } catch (err) {
                 console.log(err);
@@ -123,16 +132,32 @@ const resolvers = {
         },
         updateMovie: async (parent: any, args: any, context: any, info: any) => {
             try {
-                const {title, overview, poster_path} = args.movie;
+                const {title, overview, poster_path, popularity} = args.movie;
                 redis.del('movies')
                 const moviesUrl = `http://localhost:5001/`;
                 const response = await axios({
                     method: 'PUT',
                     url: moviesUrl + args.movie.id,
-                    data: { title, overview, poster_path }
+                    data: { title, overview, poster_path, popularity }
                 })
-                console.log(response.data);
-                return response.data
+                return response.data.value
+            } catch (err) {
+                console.log(err);
+                return err;
+            }
+        },
+        addMovieTag: async (parent: any, args: any, context: any, info: any) => {
+            try {
+                redis.del('movies');
+                const { tag } = args.movie
+                const moviesUrl = `http://localhost:5001/`;
+                const response = await axios({
+                    method: 'PATCH',
+                    url: moviesUrl + args.movie.id,
+                    data: { tag }
+                }) 
+                console.log(response.data.value)
+                return response.data.value
             } catch (err) {
                 console.log(err);
                 return err;

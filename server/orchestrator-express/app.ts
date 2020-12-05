@@ -4,6 +4,7 @@ import axios from 'axios';
 import Redis from 'ioredis';
 import { ApolloServer, gql, makeExecutableSchema } from 'apollo-server-express'
 import { typeDefs as movieTypeDef, resolvers as movieResolver } from './schemas/movieSchema'
+import { typeDefs as seriesTypeDef, resolvers as seriesResolver } from './schemas/seriesSchema'
 import { router } from './routes'
 
 //db
@@ -25,10 +26,12 @@ const typeDefs = gql`
 const schema = makeExecutableSchema({
     typeDefs: [
         typeDefs,
-        movieTypeDef
+        movieTypeDef,
+        seriesTypeDef
     ],
     resolvers: [
-        movieResolver
+        movieResolver,
+        seriesResolver
     ]
 })
 

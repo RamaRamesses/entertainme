@@ -20,6 +20,7 @@ app.use(express.urlencoded({extended: true}));
 app.get('/', SeriesController.findData)
 app.post('/', SeriesController.postSeries)
 app.put('/:id', SeriesController.updateSeries)
+app.patch('/:id', SeriesController.addTag)
 app.delete('/:id', SeriesController.deleteSeries)
 
 app.listen(PORT, () => console.log(PORT));

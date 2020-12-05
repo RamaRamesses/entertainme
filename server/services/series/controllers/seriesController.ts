@@ -43,13 +43,27 @@ export class SeriesController {
                 title: req.body.title,
                 overview: req.body.overview,
                 poster_path: req.body.poster_path,
-                popularity: req.body.popularity,
-                tags: req.body.tags
+                popularity: req.body.popularity
             }
-            const series = await seriesCollection.updateOne(query, { $set: payload })
+            const series = await seriesCollection.findOneAndUpdate(query, { $set: payload }, { returnOriginal: false })
             res.status(200).json(series);
         } catch (err) {
             console.log(err)
+            res.status(500).json(err);
+        }
+    }
+
+    static async addTag (req: Request, res: Response) {
+        console.log(req.body, "<<< BODY TAG")
+        try {
+            const query = { "_id": new ObjectID(`${req.params.id}`) }
+            const updateTags = {
+                $push: {"tags": req.body.tag }
+            }
+            const series = await seriesCollection.findOneAndUpdate(query, updateTags, { returnOriginal: false });
+            res.status(200).json(series);
+        } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     }
