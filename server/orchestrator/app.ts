@@ -8,12 +8,8 @@ import { typeDefs as seriesTypeDef, resolvers as seriesResolver } from './schema
 const databaseURL = "mongodb://localhost:27017";
 const client = new MongoClient(databaseURL, { useUnifiedTopology: true });
 client.connect();
-// const db = client.db('entertain-me');
 
-//redis
 export const redis = new Redis();
-
-//gql & apollo
 
 const typeDefs = gql`
     type Query
@@ -35,6 +31,6 @@ const schema = makeExecutableSchema({
 const server = new ApolloServer({ schema });
 
 
-server.listen().then(({ url }) => {
+server.listen(5000).then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
   });
