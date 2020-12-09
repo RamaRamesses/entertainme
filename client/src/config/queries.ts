@@ -145,3 +145,16 @@ export const GET_SERIES_BY_ID = gql`
     }
   }
 `
+
+export const GET_FAVOURITES = gql`
+  query GET_FAVOURITES {
+    favourites {
+      _id
+      title
+      overview
+      poster_path
+      popularity
+      tags
+    }
+  }
+`

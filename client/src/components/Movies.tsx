@@ -1,13 +1,14 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {AddForm} from './AddForm'
 import {EditForm} from './EditForm'
-import { DELETE_MOVIE, GET_MOVIES, UPDATE_MOVIE } from '../config/queries'
+import { DELETE_MOVIE, GET_FAVOURITES, GET_MOVIES, UPDATE_MOVIE } from '../config/queries'
 import useHandleInputForm from '../helpers/useHandleInputForm';
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { Movie } from './Movie';
 import { Route, Switch, useHistory } from 'react-router-dom';
+import client from '../config/graphql';
 
 interface MoviesObj {
   _id: String,
@@ -23,6 +24,14 @@ export const Movies : React.FC = () => {
     const [deleteMovie, {data : res}] = useMutation(DELETE_MOVIE)
     const [updateMovie, {data : updateRes }] = useMutation(UPDATE_MOVIE)
     const { handleInputChange, input, setInput } = useHandleInputForm();
+
+    useEffect(() => {
+      const cache = client.readQuery({
+        query: GET_FAVOURITES 
+      })
+      console.log(cache, 'cache')
+    }, [])
+
     function handleDeleteButton(id: any, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
       e.preventDefault();
       deleteMovie({

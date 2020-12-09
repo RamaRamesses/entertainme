@@ -6,6 +6,7 @@ import { Series } from '../components/Series';
 import { AddForm } from '../components/AddForm';
 import { MovieDetail } from './MovieDetail';
 import { SeriesDetail } from './SeriesDetail';
+import { Favourites } from './Favourites';
 
 
 export const Home: React.FC = () => {
@@ -26,6 +27,9 @@ export const Home: React.FC = () => {
       </Route>
       <Route path="/tvseries/:id">
         <SeriesDetail />
+      </Route>
+      <Route path="/favourites">
+        <Favourites />
       </Route>
       <Route path="/">
         <Redirect to="/movies" />
