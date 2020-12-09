@@ -6,27 +6,10 @@ import {AddForm} from './AddForm'
 import {EditForm} from './EditForm'
 import Modal from 'react-bootstrap/Modal'
 import { useHistory } from 'react-router-dom';
+import { Favourites as favCache } from '../config/cache'
 
 
-interface SeriesObj {
-  _id: String,
-  title: String,
-  overview: String,
-  poster_path: String,
-  popularity: Number,
-  tags: [String]
-}
-
-interface Series {
-  series: SeriesObj[]
-}
-
-interface Props {
-  data: Series,
-  seriesData: any
-}
-
-export const Series : React.FC = () => {
+export const Series = () => {
   const { handleInputChange, input, setInput } = useHandleInputForm();
   const { loading, error, data } = useQuery(GET_SERIES)
   const [ deleteSeries, {data: delData} ] = useMutation(DELETE_SERIES)
@@ -37,7 +20,7 @@ export const Series : React.FC = () => {
   const [tag, setTag] = useState('')
   const history = useHistory();
 
-  function handleDeleteButton(id: any, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function handleDeleteButton(id, e) {
     e.preventDefault();
     deleteSeries({
       variables: {
@@ -49,7 +32,7 @@ export const Series : React.FC = () => {
     })
   }
 
-  function handleTagButton(id: any, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function handleTagButton(id, e) {
     e.preventDefault();
     addTag({
       variables: {
@@ -64,7 +47,7 @@ export const Series : React.FC = () => {
     })
   }
 
-  function handleUpdateButton( obj: any) {
+  function handleUpdateButton( obj) {
     const payload = {
       id: obj._id,
       title: obj.title,
@@ -91,7 +74,7 @@ export const Series : React.FC = () => {
         </div>
         <div className="row">
         {
-          data.allSeries.map((series : SeriesObj, i : Number) => {
+          data.allSeries.map((series, i) => {
             return (
               <div key={i.toString()} className="card content mx-1 mt-0 border-0" style={{ height: '15rem'}}>
                 <div className="card-body p-0 d-flex" style={{width: '100%'}}>
@@ -120,7 +103,7 @@ export const Series : React.FC = () => {
                       </div>
                       <div className="row card-text m-0 mb-2">
                         {
-                          series.tags.map((tag: String) => {
+                          series.tags.map((tag) => {
                             return <p className="m-0"><span className="badge bg-info text-light mr-1">{tag}</span></p>
                           })
                         }
@@ -151,6 +134,11 @@ export const Series : React.FC = () => {
                       </div>
                         <p className="card-text m-0">{series.overview}</p>
                         <button type="button" className="btn btn-sm btn-success" onClick={() => history.push(`/tvseries/${series._id}`)}>Detail</button>
+                        <button type="button" className="btn btn-sm btn-danger" onClick={() => {
+                          let favourites = favCache()
+                          favourites.push(series);
+                          favCache(favourites)
+                        }}>Add to Favourites</button>
                     </div>
                   </div>
                     <button onClick={(e) => handleDeleteButton(series._id, e)} className="btn btn-danger justify-content-end">Delete</button>
