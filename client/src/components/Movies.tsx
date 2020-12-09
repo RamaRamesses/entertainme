@@ -23,7 +23,8 @@ interface Props {
   moviesdata: any
 }
 
-export const Movies : React.FC<Props> = ({data, moviesdata}) => {
+export const Movies : React.FC = () => {
+    const { loading, error, data } = useQuery(GET_MOVIES)
     const [deleteMovie, {data : res}] = useMutation(DELETE_MOVIE)
     const [updateMovie, {data : updateRes }] = useMutation(UPDATE_MOVIE)
     const { handleInputChange, input, setInput } = useHandleInputForm();
@@ -49,7 +50,8 @@ export const Movies : React.FC<Props> = ({data, moviesdata}) => {
       }
       setInput(payload)
     }
-
+    if(loading) return <h1>Loading</h1>
+    if(error) return <h1>Error</h1>
     return (
       <div className="container mt-4">
         <div className="row d-flex mb-2">
@@ -93,7 +95,7 @@ export const Movies : React.FC<Props> = ({data, moviesdata}) => {
                         </button>
                       </div>
                       <div className="modal-body">
-                        <EditForm input={input} handleInputChange={handleInputChange} />
+                        <EditForm input={input} handleInputChange={handleInputChange} category={"Movies"} />
                       </div>
                     </div>
                   </div>

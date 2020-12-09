@@ -49,12 +49,46 @@ export const UPDATE_MOVIE = gql`
 
 export const GET_SERIES = gql`
   query GET_SERIES {
-    allseries {
+    allSeries {
       _id,
       title,
       overview,
       poster_path,
       popularity,
+      tags
+    }
+  }
+`
+
+export const ADD_SERIES = gql`
+mutation ADD_SERIES ($series: seriesInput) {
+  addSeries(series: $series) {
+    _id
+    title
+    overview
+    poster_path
+    popularity
+    tags
+  }
+}
+`
+
+export const DELETE_SERIES = gql`
+  mutation DELETE_SERIES ($id: String!) {
+    deleteSeries(id: $id) {
+      _id
+    }
+  }
+`
+
+export const UPDATE_SERIES = gql`
+  mutation UPDATE_SERIES ($series: seriesUpdate) {
+    updateSeries(series: $series) {
+      _id
+      title
+      overview
+      poster_path
+      popularity
       tags
     }
   }

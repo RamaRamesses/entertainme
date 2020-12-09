@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import useHandleInputForm from '../helpers/useHandleInputForm'
-import { ADD_MOVIE, GET_MOVIES } from '../config/queries'
+import { ADD_MOVIE, ADD_SERIES, GET_MOVIES, GET_SERIES } from '../config/queries'
 
 interface Props {
   category: string
@@ -9,7 +9,8 @@ interface Props {
 
 export const AddForm : React.FC<Props> = ({category}) => {
   const {input, handleInputChange} = useHandleInputForm()
-  const [addMovie, { data } ] = useMutation(ADD_MOVIE)
+  const [addMovie, { data: movieData } ] = useMutation(ADD_MOVIE)
+  const [addSeries, { data: seriesData } ] = useMutation(ADD_SERIES)
   return (
     <div>
       <form>
@@ -40,6 +41,15 @@ export const AddForm : React.FC<Props> = ({category}) => {
             },
             refetchQueries: [{
               query: GET_MOVIES
+            }]
+          })
+        } else {
+          addSeries({
+            variables: {
+              series: input
+            },
+            refetchQueries: [{
+              query: GET_SERIES
             }]
           })
         }

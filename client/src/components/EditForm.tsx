@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import useHandleInputForm from '../helpers/useHandleInputForm'
-import { ADD_MOVIE, GET_MOVIES, UPDATE_MOVIE } from '../config/queries'
+import { ADD_MOVIE, GET_MOVIES, GET_SERIES, UPDATE_MOVIE, UPDATE_SERIES } from '../config/queries'
 
 interface Input {
   title: string,
@@ -12,11 +12,13 @@ interface Input {
 
 interface Props {
     input: Input,
-    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    category: string
 }
 
-export const EditForm : React.FC<Props> = ({input, handleInputChange}) => {
-  const [editMovie, { data } ] = useMutation(UPDATE_MOVIE)
+export const EditForm : React.FC<Props> = ({input, handleInputChange, category}) => {
+  const [editMovie, { data: movieData } ] = useMutation(UPDATE_MOVIE)
+  const [editSeries, { data: seriesData } ] = useMutation(UPDATE_SERIES)
   return (
     <div>
       <form>
@@ -40,14 +42,25 @@ export const EditForm : React.FC<Props> = ({input, handleInputChange}) => {
         e.preventDefault();
         input.popularity = Number(input.popularity)
         console.log(input)
-        editMovie({
-          variables: {
-            movie: input
-          },
-          refetchQueries: [{
-            query: GET_MOVIES
-          }]
-        })
+        if(category === "Movies") {
+          editMovie({
+            variables: {
+              movie: input
+            },
+            refetchQueries: [{
+              query: GET_MOVIES
+            }]
+          })
+        } else {
+          editSeries({
+            variables: {
+              series: input
+            },
+            refetchQueries: [{
+              query: GET_SERIES
+            }]
+          })
+        }
       }} type="submit" className="btn btn-primary float-left" data-dismiss="modal">Submit</button>
       </form>
     </div>
