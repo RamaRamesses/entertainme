@@ -52,7 +52,9 @@ const typeDefs = gql`
 const resolvers = {
     Query: {
         movies: async () => {
+            console.log('movies')
             try {
+                console.log('a')
                 const moviesUrl = `http://localhost:5001/`;
                 const movies = await redis.get('movies');
                 if(movies) {
