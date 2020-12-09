@@ -93,3 +93,29 @@ export const UPDATE_SERIES = gql`
     }
   }
 `
+
+export const ADD_SERIES_TAG = gql`
+  mutation addSeriesTag($series: seriesTag) {
+    addSeriesTag(series: $series) {
+      _id
+      title
+      overview
+      poster_path
+      popularity
+      tags
+    }
+  }
+`
+
+export const ADD_MOVIES_TAG = gql`
+  mutation addMovieTag($movie: addTag) {
+    addMovieTag(movie: $movie) {
+      _id
+      title
+      overview
+      poster_path
+      popularity
+      tags
+    }
+  }
+`

@@ -59,14 +59,6 @@ export const Movies : React.FC = () => {
           </div>
           <div className="col-md-1">
             <button className="btn btn-lg text-white bg-info" onClick={() => history.push('/movies/add')}>+</button>
-            {/* <Modal show={show} onHide={handleClose}>
-              <Modal.Header closeButton>
-                <Modal.Title>Modal heading</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <AddForm input={input} handleInputChange={handleInputChange} category={"Movies"} handleClose={handleClose} />
-                </Modal.Body>
-            </Modal> */}
           </div>
         </div>
         {

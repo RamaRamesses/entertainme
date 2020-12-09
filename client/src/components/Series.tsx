@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
-import { DELETE_SERIES, GET_SERIES } from '../config/queries';
+import { ADD_SERIES_TAG, DELETE_SERIES, GET_SERIES } from '../config/queries';
 import useHandleInputForm from '../helpers/useHandleInputForm';
 import {AddForm} from './AddForm'
 import {EditForm} from './EditForm'
@@ -30,9 +30,11 @@ export const Series : React.FC = () => {
   const { handleInputChange, input, setInput } = useHandleInputForm();
   const { loading, error, data } = useQuery(GET_SERIES)
   const [ deleteSeries, {data: delData} ] = useMutation(DELETE_SERIES)
+  const [ addTag, {data: tagData} ] = useMutation(ADD_SERIES_TAG)
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [tag, setTag] = useState('')
   const history = useHistory();
 
   function handleDeleteButton(id: any, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -40,6 +42,21 @@ export const Series : React.FC = () => {
     deleteSeries({
       variables: {
         id
+      },
+      refetchQueries: [{
+        query: GET_SERIES
+      }]
+    })
+  }
+
+  function handleTagButton(id: any, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.preventDefault();
+    addTag({
+      variables: {
+        series: {
+          id,
+          tag
+        }
       },
       refetchQueries: [{
         query: GET_SERIES
@@ -103,6 +120,30 @@ export const Series : React.FC = () => {
                           return <p className="m-0"><span className="badge bg-info mr-1 text-light">{tag}</span></p>
                         })
                       }
+                      <button type="button" className="btn btn-primary btn-sm ml-auto" data-toggle="modal" data-target={`#tag${i}`}>Add tag</button>
+                      <div className="modal fade" id={`tag${i}`} tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h5 className="modal-title" id="exampleModalLabel">Add Tag</h5>
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div className="modal-body">
+                              <div className="mb-3">
+                                <label htmlFor="tag">Add Tag</label>
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" value={tag} onChange={(e) => {
+                                  setTag(e.target.value)
+                                }} name="tag" />
+                              </div>
+                              <button onClick={(e) => handleTagButton(series._id, e)} type="button" className="btn btn-sm btn-primary" data-dismiss="modal">Submit</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                       <p className="card-text m-0">{series.overview}</p>
                   </div>

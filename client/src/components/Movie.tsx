@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal'
 import { EditForm } from './EditForm';
 import { useHistory, useRouteMatch, Route, Switch } from "react-router-dom";
+import { useMutation } from '@apollo/client';
+import { ADD_MOVIES_TAG, GET_MOVIES } from '../config/queries';
 
 
 interface Props {
@@ -19,6 +21,23 @@ export const Movie : React.FC<Props> = ({movie, handleUpdateButton, handleDelete
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   let { path, url } = useRouteMatch();
+  const [tag, setTag] = useState('')
+  const [addTag, {data: tagData}] = useMutation(ADD_MOVIES_TAG)
+  function handleTagButton(id: any, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.preventDefault();
+    addTag({
+      variables: {
+        movie: {
+          id,
+          tag
+        }
+      },
+      refetchQueries: [{
+        query: GET_MOVIES
+      }]
+    })
+  }
+
   return (
     <div key={i.toString()} className="card content mx-1 mt-0 border-0" style={{width: '100%', height: '15rem'}}>
       <div className="card-body p-0 d-flex">
@@ -48,11 +67,35 @@ export const Movie : React.FC<Props> = ({movie, handleUpdateButton, handleDelete
             <div className="row card-text m-0">
               {
                 movie.tags.map((tag: String) => {
-                  return <p className="m-0"><span className="badge bg-secondary">{tag}</span></p>
+                  return <p className="m-0"><span className="badge bg-info text-light mr-1">{tag}</span></p>
                 })
               }
-              <p className="card-text m-0">{movie.overview}</p>
+              <button type="button" className="btn btn-primary btn-sm ml-auto" data-toggle="modal" data-target={`#tag${i}`}>Add tag</button>
+              <div className="modal fade" id={`tag${i}`} tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title" id="exampleModalLabel">Add Tag</h5>
+                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                      <div className="mb-3">
+                        <label htmlFor="tag">Add Tag</label>
+                      </div>
+                      <div className="mb-3">
+                        <input type="text" value={tag} onChange={(e) => {
+                          setTag(e.target.value)
+                        }} name="tag" />
+                      </div>
+                      <button onClick={(e) => handleTagButton(movie._id, e)} type="button" className="btn btn-sm btn-primary" data-dismiss="modal">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+              <p className="card-text m-0">{movie.overview}</p>
           </div>
           <div className="col-md-2 justify-content-end">
             <img className="img-responsive" alt="img-skeleton2"
