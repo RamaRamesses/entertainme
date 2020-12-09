@@ -24,21 +24,23 @@ export const Favourites = () => {
           <h1 className="text-left ml-2">Favourites</h1>
         </div>
       </div>
-      {
-        reactiveVar.map(favourite => {
-          return (
-            <Card style={{ width: '18rem' }}>
-              <Card.Img variant="top" src={favourite.poster_path} />
-              <Card.Body>
-                <Card.Title>{favourite.title}</Card.Title>
-                <Card.Text>
-                  {favourite.overview}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          )
-        })
-      }
+      <div className="row">
+        {
+          reactiveVar.map(favourite => {
+            return (
+              <Card style={{ width: '18rem' }}>
+                <Card.Img variant="top" src={favourite.poster_path} />
+                <Card.Body>
+                  <Card.Title>{favourite.title}</Card.Title>
+                  <Card.Text>
+                    {favourite.overview}
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            )
+          })
+        }
+      </div>
       </div>
   )
 }
