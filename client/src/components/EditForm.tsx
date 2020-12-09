@@ -61,7 +61,7 @@ export const EditForm : React.FC<Props> = ({input, handleInputChange, category, 
       </div>
       <div className="mb-3 text-left">
         <label htmlFor="popularity" className="form-label">Popularity</label>
-        <input name="popularity" value={input.popularity} onChange={handleInputChange} required type="number" className="form-control" id="popularity" />
+        <input name="popularity" value={input.popularity} onChange={handleInputChange} required type="text" className="form-control" id="popularity" />
       </div>
       <button type="submit" className="btn btn-primary float-left">Submit</button>
       </form>

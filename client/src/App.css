@@ -2,9 +2,19 @@
   text-align: center;
 }
 
+body {
+  background-color: #FF2147;
+
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.main-bg {
+  box-shadow: 5px 25px 35px 5px rgba(0,0,0, .50);
+  font-family: 'Gugi', cursive;
 }
 
 @media (prefers-reduced-motion: no-preference) {

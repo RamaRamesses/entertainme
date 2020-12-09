@@ -52,7 +52,7 @@ export const Movies : React.FC = () => {
     if(loading) return <h1>Loading</h1>
     if(error) return <h1>Error</h1>
     return (
-      <div className="container mt-4">
+      <div className="container mt-4 bg-light p-5 main-bg mb-5">
         <div className="row d-flex mb-2">
           <div className="col-md-11">
             <h1 className="text-left ml-2">Movies</h1>
@@ -61,11 +61,13 @@ export const Movies : React.FC = () => {
             <button className="btn btn-lg text-white bg-info" onClick={() => history.push('/movies/add')}>+</button>
           </div>
         </div>
-        {
-          data.movies.map((movie : MoviesObj, i : Number) => {
-            return <Movie i={i} handleDeleteButton={handleDeleteButton} 
-            handleUpdateButton={handleUpdateButton} movie={movie} handleInputChange={handleInputChange} input={input} /> 
-          })
-        }  
+        <div className="row">
+          {
+            data.movies.map((movie : MoviesObj, i : Number) => {
+              return <Movie i={i} handleDeleteButton={handleDeleteButton} 
+              handleUpdateButton={handleUpdateButton} movie={movie} handleInputChange={handleInputChange} input={input} /> 
+            })
+          }  
+        </div>
       </div>)
 }

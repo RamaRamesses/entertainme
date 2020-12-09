@@ -39,8 +39,17 @@ export const Movie : React.FC<Props> = ({movie, handleUpdateButton, handleDelete
   }
 
   return (
-    <div key={i.toString()} className="card content mx-1 mt-0 border-0" style={{width: '100%', height: '15rem'}}>
-      <div className="card-body p-0 d-flex">
+    // <div className="col-md-2">
+    //   <div className="card p-0 mb-4" style={{border: '0', maxHeight: '16rem'}}>
+    //     <img className="card-img-top" src={movie.poster_path} style={{height: '18rem', objectPosition: '0% 0%', borderRadius: '15px'}}/>
+    //     <div className="card-body py-2 px-2" style={{fontFamily: 'Gugi, cursive', height: '14rem', padding: '0'}}>
+    //         <p className="card-title text-left">{movie.title}</p>
+    //     </div>
+    //   </div>
+    // </div>
+    
+    <div key={i.toString()} className="card content mx-1 mt-0 border-0" style={{ height: '15rem'}}>
+      <div className="card-body p-0 d-flex" style={{width: '100%'}}>
         <button onClick={() => {
           handleUpdateButton(movie)
           handleShow();
@@ -53,24 +62,24 @@ export const Movie : React.FC<Props> = ({movie, handleUpdateButton, handleDelete
             <EditForm category={"Movies"} handleClose={handleClose} handleInputChange={handleInputChange} input={input} />
           </Modal.Body>
         </Modal>
-        <div className="row">
-          <div className="col-md-1 pt-4 pl-4 mr-3">
-            <img height="125rem" alt="skeleton-img"
-            src="https://raw.githubusercontent.com/alexZajac/react-native-skeleton-content/master/demos/main.gif"></img>
+        <div className="row d-flex">
+          <div className="col-md-2">
+            <img className="img-responsive" alt="img-skeleton2"
+            src={movie.poster_path} 
+            style={{ width: '100%', height: '15rem', objectPosition: "0% 0%"}}></img>
           </div>
-          <div className="col-md-8 m-0 text-left pl-4">
+          <div className="col-md-10 m-0 text-left pl-4">
             <div className="row">
               <h2 className="card-title m-0 mt-3 ml-2 mb-1">{movie.title}</h2>
-              <p className="text-right ml-auto card-text mt-3">{movie.popularity}</p>
+              <p className="text-right ml-auto card-text mt-3 mr-4">{movie.popularity}</p>
             </div>
-            <p className="card-text m-0">{movie.poster_path}</p>
-            <div className="row card-text m-0">
+            <div className="row card-text m-0 mb-2">
               {
                 movie.tags.map((tag: String) => {
                   return <p className="m-0"><span className="badge bg-info text-light mr-1">{tag}</span></p>
                 })
               }
-              <button type="button" className="btn btn-primary btn-sm ml-auto" data-toggle="modal" data-target={`#tag${i}`}>Add tag</button>
+              <button type="button" className="btn btn-primary btn-sm ml-auto mr-3" data-toggle="modal" data-target={`#tag${i}`}>Add tag</button>
               <div className="modal fade" id={`tag${i}`} tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                   <div className="modal-content">
@@ -96,14 +105,11 @@ export const Movie : React.FC<Props> = ({movie, handleUpdateButton, handleDelete
               </div>
             </div>
               <p className="card-text m-0">{movie.overview}</p>
-          </div>
-          <div className="col-md-2 justify-content-end">
-            <img className="img-responsive" alt="img-skeleton2"
-            src="https://hackathonthailand.com/images/default-thumbnail.gif" 
-            style={{objectFit: 'cover', width: '150%', height: '100%'}}></img>
+              <button type="button" className="btn btn-sm btn-success" onClick={() => history.push(`/movies/${movie._id}`)}>Detail</button>
           </div>
         </div>
-          <button onClick={(e) => handleDeleteButton(movie._id, e)} className="btn btn-danger">Delete</button>
+          <button onClick={(e) => handleDeleteButton(movie._id, e)} className="btn btn-danger justify-content-end">Delete</button>
       </div>
-    </div>)
+    </div>
+    )
 }

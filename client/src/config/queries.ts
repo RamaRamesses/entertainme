@@ -119,3 +119,29 @@ export const ADD_MOVIES_TAG = gql`
     }
   }
 `
+
+export const GET_MOVIE_BY_ID = gql`
+  query GET_MOVIE_BY_ID($id: String!) {
+    movie(id: $id) {
+      _id
+      title
+      overview
+      poster_path
+      popularity
+      tags
+    }
+  }
+`
+
+export const GET_SERIES_BY_ID = gql`
+  query GET_SERIES_BY_ID($id: String!) {
+    series(id: $id) {
+      _id
+      title
+      overview
+      poster_path
+      popularity
+      tags
+    }
+  }
+`
