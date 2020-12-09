@@ -25,13 +25,6 @@ export const Movies : React.FC = () => {
     const [updateMovie, {data : updateRes }] = useMutation(UPDATE_MOVIE)
     const { handleInputChange, input, setInput } = useHandleInputForm();
 
-    useEffect(() => {
-      const cache = client.readQuery({
-        query: GET_FAVOURITES 
-      })
-      console.log(cache, 'cache')
-    }, [])
-
     function handleDeleteButton(id: any, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
       e.preventDefault();
       deleteMovie({
