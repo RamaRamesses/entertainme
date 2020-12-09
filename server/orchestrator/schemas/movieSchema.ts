@@ -103,6 +103,7 @@ const resolvers = {
     Mutation : {
         addMovie: async (parent: any, args: any, context: any, info: any) => {
             try {
+                console.log(args.movie)
                 const { title, overview, poster_path, popularity } = args.movie;
                 const moviesUrl = `http://localhost:5001/`;
                 const response = await axios({

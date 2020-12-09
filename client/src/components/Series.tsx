@@ -1,9 +1,12 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React from 'react';
+import React, { useState } from 'react';
 import { DELETE_SERIES, GET_SERIES } from '../config/queries';
 import useHandleInputForm from '../helpers/useHandleInputForm';
 import {AddForm} from './AddForm'
 import {EditForm} from './EditForm'
+import Modal from 'react-bootstrap/Modal'
+import { useHistory } from 'react-router-dom';
+
 
 interface SeriesObj {
   _id: String,
@@ -27,6 +30,10 @@ export const Series : React.FC = () => {
   const { handleInputChange, input, setInput } = useHandleInputForm();
   const { loading, error, data } = useQuery(GET_SERIES)
   const [ deleteSeries, {data: delData} ] = useMutation(DELETE_SERIES)
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const history = useHistory();
 
   function handleDeleteButton(id: any, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
@@ -49,6 +56,7 @@ export const Series : React.FC = () => {
       popularity: obj.popularity
     }
     setInput(payload)
+    handleShow();
   }
   console.log(data)
 
@@ -61,23 +69,7 @@ export const Series : React.FC = () => {
             <h1 className="text-left ml-2">Series</h1>
           </div>
           <div className="col-md-1">
-            <button className="btn btn-lg text-white bg-info" data-toggle="modal" data-target="#exampleModal">+</button>
-            <div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" 
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div className="modal-dialog" role="document">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div className="modal-body">
-                    <AddForm category={"Series"} />
-                  </div>
-                </div>
-              </div>
-            </div>
+             <button className="btn btn-lg text-white bg-info" onClick={() => history.push('/tvseries/add')}>+</button>
           </div>
         </div>
         {
@@ -85,24 +77,15 @@ export const Series : React.FC = () => {
             return (
             <div key={i.toString()} className="card content mx-1 mt-0 border-0" style={{width: '100%', height: '15rem'}}>
               <div className="card-body p-0 d-flex">
-                <button onClick={() => handleUpdateButton(series)} data-toggle="modal" 
-                data-target="#modalUpdate" className="btn btn-warning p-3">Edit</button>
-                <div className="modal fade" id="modalUpdate" tabIndex={-1} role="dialog" 
-                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div className="modal-body">
-                        <EditForm input={input} handleInputChange={handleInputChange} category={"Series"} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <button onClick={() => handleUpdateButton(series)} className="btn btn-warning p-3">Edit</button>
+                <Modal show={show} onHide={handleClose}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Modal heading</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <EditForm handleClose={handleClose} input={input} handleInputChange={handleInputChange} category={"Series"} />
+                  </Modal.Body>
+                </Modal>
                 <div className="row">
                   <div className="col-md-1 pt-4 pl-4 mr-3">
                     <img height="125rem" 
