@@ -1,15 +1,22 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import useHandleInputForm from '../helpers/useHandleInputForm'
-import { ADD_MOVIE, GET_MOVIES } from '../config/queries'
+import { ADD_MOVIE, GET_MOVIES, UPDATE_MOVIE } from '../config/queries'
 
-interface Props {
-  category: string
+interface Input {
+  title: string,
+  overview: string,
+  poster_path: string,
+  popularity: number
 }
 
-export const AddForm : React.FC<Props> = ({category}) => {
-  const {input, handleInputChange} = useHandleInputForm()
-  const [addMovie, { data } ] = useMutation(ADD_MOVIE)
+interface Props {
+    input: Input,
+    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export const EditForm : React.FC<Props> = ({input, handleInputChange}) => {
+  const [editMovie, { data } ] = useMutation(UPDATE_MOVIE)
   return (
     <div>
       <form>
@@ -33,16 +40,14 @@ export const AddForm : React.FC<Props> = ({category}) => {
         e.preventDefault();
         input.popularity = Number(input.popularity)
         console.log(input)
-        if(category === 'Movies') {
-          addMovie({
-            variables: {
-              movie: input
-            },
-            refetchQueries: [{
-              query: GET_MOVIES
-            }]
-          })
-        }
+        editMovie({
+          variables: {
+            movie: input
+          },
+          refetchQueries: [{
+            query: GET_MOVIES
+          }]
+        })
       }} type="submit" className="btn btn-primary float-left" data-dismiss="modal">Submit</button>
       </form>
     </div>

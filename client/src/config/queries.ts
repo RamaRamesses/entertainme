@@ -33,3 +33,29 @@ export const DELETE_MOVIE = gql`
     }
   }
 `
+
+export const UPDATE_MOVIE = gql`
+  mutation UPDATE_MOVIE($movie: updateMovie) {
+    updateMovie(movie: $movie) {
+      _id
+      title
+      overview
+      poster_path
+      popularity
+      tags
+    }
+  }
+`
+
+export const GET_SERIES = gql`
+  query GET_SERIES {
+    allseries {
+      _id,
+      title,
+      overview,
+      poster_path,
+      popularity,
+      tags
+    }
+  }
+`

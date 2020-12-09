@@ -5,5 +5,5 @@ export default function useHandleInputForm () {
     function handleInputChange (event: React.ChangeEvent<HTMLInputElement>) {
         setInput(input => ({...input, [event.target.name]: event.target.value }))
     }
-    return {input, handleInputChange}
+    return {input, handleInputChange, setInput}
   }
