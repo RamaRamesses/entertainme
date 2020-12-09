@@ -4,18 +4,19 @@ import { EditForm } from './EditForm';
 import { useHistory, useRouteMatch, Route, Switch } from "react-router-dom";
 import { useMutation } from '@apollo/client';
 import { ADD_MOVIES_TAG, GET_MOVIES } from '../config/queries';
+import { Favourites as favCache } from '../config/cache'
 
 
-interface Props {
-  movie: any,
-  handleUpdateButton: any,
-  i: any,
-  handleDeleteButton: any,
-  handleInputChange: any,
-  input: any
-}
+// interface Props {
+//   movie: any,
+//   handleUpdateButton: any,
+//   i: any,
+//   handleDeleteButton: any,
+//   handleInputChange: any,
+//   input: any
+// }
 
-export const Movie : React.FC<Props> = ({movie, handleUpdateButton, handleDeleteButton, i, handleInputChange, input}) => {
+export const Movie = ({movie, handleUpdateButton, handleDeleteButton, i, handleInputChange, input}) => {
   const history = useHistory();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -23,7 +24,7 @@ export const Movie : React.FC<Props> = ({movie, handleUpdateButton, handleDelete
   let { path, url } = useRouteMatch();
   const [tag, setTag] = useState('')
   const [addTag, {data: tagData}] = useMutation(ADD_MOVIES_TAG)
-  function handleTagButton(id: any, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function handleTagButton(id, e) {
     e.preventDefault();
     addTag({
       variables: {
@@ -75,7 +76,7 @@ export const Movie : React.FC<Props> = ({movie, handleUpdateButton, handleDelete
             </div>
             <div className="row card-text m-0 mb-2">
               {
-                movie.tags.map((tag: String) => {
+                movie.tags.map((tag) => {
                   return <p className="m-0"><span className="badge bg-info text-light mr-1">{tag}</span></p>
                 })
               }
@@ -106,6 +107,11 @@ export const Movie : React.FC<Props> = ({movie, handleUpdateButton, handleDelete
             </div>
               <p className="card-text m-0">{movie.overview}</p>
               <button type="button" className="btn btn-sm btn-success" onClick={() => history.push(`/movies/${movie._id}`)}>Detail</button>
+              <button type="button" className="btn btn-sm btn-danger" onClick={() => {
+                let favourites = favCache()
+                favourites.push(movie);
+                favCache(favourites)
+              }}>Add to Favourites</button>
           </div>
         </div>
           <button onClick={(e) => handleDeleteButton(movie._id, e)} className="btn btn-danger justify-content-end">Delete</button>
