@@ -52,7 +52,11 @@ export const Movies : React.FC = () => {
     const handleShow = () => setShow(true);
     const history = useHistory();
     if(loading) return <h1>Loading</h1>
-    if(error) return <h1>Error</h1>
+    if(error) {
+      console.log(error);
+      console.log(data);
+      return <h1>Error</h1>  
+    }
     return (
       <div className="container mt-4 bg-light p-5 main-bg mb-5">
         <div className="row d-flex mb-2">

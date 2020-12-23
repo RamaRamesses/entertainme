@@ -49,8 +49,8 @@ export const Movie = ({movie, handleUpdateButton, handleDeleteButton, i, handleI
     //   </div>
     // </div>
     
-    <div key={i.toString()} className="card content mx-1 mt-0 border-0" style={{ height: '15rem'}}>
-      <div className="card-body p-0 d-flex" style={{width: '100%'}}>
+    <div key={i.toString()} className="card content mx-1 mt-0 border-0" style={{ height: '15rem', minWidth: '100%'}}>
+      <div className="card-body p-0 d-flex">
         <button onClick={() => {
           handleUpdateButton(movie)
           handleShow();
@@ -63,58 +63,56 @@ export const Movie = ({movie, handleUpdateButton, handleDeleteButton, i, handleI
             <EditForm category={"Movies"} handleClose={handleClose} handleInputChange={handleInputChange} input={input} />
           </Modal.Body>
         </Modal>
-        <div className="row d-flex">
-          <div className="col-md-2">
+        <div className="">
             <img className="img-responsive" alt="img-skeleton2"
             src={movie.poster_path} 
             style={{ width: '100%', height: '15rem', objectPosition: "0% 0%"}}></img>
+        </div>
+        <div className="col-8 m-0 text-left">
+          <div className="row">
+            <h2 className="card-title m-0 mt-3 ml-2 mb-1">{movie.title}</h2>
+            <p className="text-right ml-auto card-text mt-3 mr-4 ml-auto">{movie.popularity}</p>
           </div>
-          <div className="col-md-10 m-0 text-left pl-4">
-            <div className="row">
-              <h2 className="card-title m-0 mt-3 ml-2 mb-1">{movie.title}</h2>
-              <p className="text-right ml-auto card-text mt-3 mr-4">{movie.popularity}</p>
-            </div>
-            <div className="row card-text m-0 mb-2">
-              {
-                movie.tags.map((tag) => {
-                  return <p className="m-0"><span className="badge bg-info text-light mr-1">{tag}</span></p>
-                })
-              }
-              <button type="button" className="btn btn-primary btn-sm ml-auto mr-3" data-toggle="modal" data-target={`#tag${i}`}>Add tag</button>
-              <div className="modal fade" id={`tag${i}`} tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalLabel">Add Tag</h5>
-                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
+          <div className="row card-text m-0 mb-2">
+            {
+              movie.tags.map((tag) => {
+                return <p className="m-0"><span className="badge bg-info text-light mr-1">{tag}</span></p>
+              })
+            }
+            <button type="button" className="ml-auto btn btn-primary btn-sm ml-auto mr-3" data-toggle="modal" data-target={`#tag${i}`}>Add tag</button>
+            <div className="modal fade" id={`tag${i}`} tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">Add Tag</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <div className="mb-3">
+                      <label htmlFor="tag">Add Tag</label>
                     </div>
-                    <div className="modal-body">
-                      <div className="mb-3">
-                        <label htmlFor="tag">Add Tag</label>
-                      </div>
-                      <div className="mb-3">
-                        <input type="text" value={tag} onChange={(e) => {
-                          setTag(e.target.value)
-                        }} name="tag" />
-                      </div>
-                      <button onClick={(e) => handleTagButton(movie._id, e)} type="button" className="btn btn-sm btn-primary" data-dismiss="modal">Submit</button>
+                    <div className="mb-3">
+                      <input type="text" value={tag} onChange={(e) => {
+                        setTag(e.target.value)
+                      }} name="tag" />
                     </div>
+                    <button onClick={(e) => handleTagButton(movie._id, e)} type="button" className="btn btn-sm btn-primary" data-dismiss="modal">Submit</button>
                   </div>
                 </div>
               </div>
             </div>
-              <p className="card-text m-0">{movie.overview}</p>
-              <button type="button" className="btn btn-sm btn-success" onClick={() => history.push(`/movies/${movie._id}`)}>Detail</button>
-              <button type="button" className="btn btn-sm btn-danger" onClick={() => {
-                let favourites = favCache()
-                favourites.push(movie);
-                favCache(favourites)
-              }}>Add to Favourites</button>
           </div>
+            <p className="card-text m-0 mb-2">{movie.overview}</p>
+            <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => history.push(`/movies/${movie._id}`)}>Detail</button>
+            <button type="button" className="btn btn-sm btn-danger" onClick={() => {
+              let favourites = favCache()
+              favourites.push(movie);
+              favCache(favourites)
+            }}>Add to Favourites</button>
         </div>
-          <button onClick={(e) => handleDeleteButton(movie._id, e)} className="btn btn-danger justify-content-end">Delete</button>
+        <button onClick={(e) => handleDeleteButton(movie._id, e)} className="ml-auto btn btn-danger justify-content-end">Delete</button>
       </div>
     </div>
     )
